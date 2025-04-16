@@ -1,0 +1,306 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[vietnamese]{babel}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\begin{document}
+
+\title{Phân tích dữ liệu sức khỏe}
+\author{Tràn Anh Quân}
+\date{\today}
+\maketitle
+
+\section{Giới thiệu}
+
+Quản lý cân nặng đóng vai trò quan trọng trong việc duy trì sức khỏe và phòng ngừa các bệnh lý liên quan đến lối sống như béo phì, tiểu đường và tim mạch. Việc phân tích dữ liệu về thói quen tập luyện và lối sống có thể cung cấp những hiểu biết quan trọng trong việc tối ưu hóa chiến lược quản lý cân nặng.
+
+Nghiên cứu này sử dụng bộ dữ liệu FitLife360, bao gồm thông tin theo dõi sức khỏe và hoạt động thể chất của 3.000 người tham gia trong vòng một năm. Dữ liệu bao gồm các thông tin nhân khẩu học, thói quen tập luyện, chỉ số sinh lý và các yếu tố lối sống như thời gian ngủ, mức độ căng thẳng và mức độ hydrat hóa. Việc khai thác và phân tích dữ liệu này có thể giúp xác định các yếu tố có ảnh hưởng đáng kể đến cân nặng, từ đó hỗ trợ các biện pháp điều chỉnh phù hợp.\\
+\textbf{Mục tiêu nghiên cứu:}
+
+Phân tích tác động của các loại hình tập luyện và cường độ tập luyện đến lượng calo tiêu thụ.
+
+Đánh giá ảnh hưởng của giấc ngủ, mức độ căng thẳng và lượng nước tiêu thụ đến quản lý cân nặng.
+
+Xác định mối quan hệ giữa các chỉ số sinh lý (nhịp tim, huyết áp) với quá trình kiểm soát cân nặng.
+
+Ứng dụng hồi quy tuyến tính để xây dựng mô hình dự đoán mức độ tiêu hao calo dựa trên các biến số liên quan.
+
+Ứng dụng thực tiễn
+
+Hỗ trợ cá nhân xây dựng chương trình tập luyện phù hợp với thể trạng và mục tiêu kiểm soát cân nặng.
+
+Đưa ra khuyến nghị về chế độ sinh hoạt hợp lý nhằm tối ưu hóa hiệu quả tập luyện.
+
+Cung cấp cơ sở dữ liệu cho chuyên gia sức khỏe trong việc thiết kế các chương trình quản lý cân nặng dựa trên bằng chứng thực nghiệm.
+
+Việc phân tích dữ liệu này sẽ góp phần nâng cao hiểu biết về mối quan hệ giữa thói quen tập luyện, lối sống và cân nặng, đồng thời hỗ trợ các giải pháp khoa học trong lĩnh vực quản lý sức khỏe cá nhân.
+\section{Giới thiệu chung về các phương pháp phân tích dữ liệu}
+\subsection*{Thống kê mô tả (Descriptive Statistics)}
+
+Thống kê mô tả là tập hợp các phương pháp được sử dụng để tổ chức, tóm tắt và trình bày dữ liệu một cách có ý nghĩa, nhằm cung cấp cái nhìn tổng quan về tập dữ liệu mà không cần đưa ra kết luận suy luận hay dự đoán. Nó tập trung vào ba khía cạnh chính: \textbf{xu hướng trung tâm}, \textbf{độ phân tán}, và \textbf{hình dạng phân phối}. Dưới đây là lý thuyết chi tiết cho từng phần:
+
+\subsubsection*{1. Đo lường xu hướng trung tâm (Measures of Central Tendency)}
+Xu hướng trung tâm thể hiện giá trị ``đại diện'' hoặc ``trung tâm'' của tập dữ liệu, giúp hiểu được vị trí chung của các quan sát.
+
+\begin{enumerate}[label=\Roman*.]
+    \item \textbf{Mean (Trung bình cộng):} \\
+    Đây là giá trị trung bình của tất cả các quan sát trong tập dữ liệu, được tính bằng cách cộng tất cả các giá trị và chia cho số lượng phần tử. \\
+    Công thức:
+    \[
+    \text{Mean} (\mu) = \frac{\sum_{i=1}^{n} x_i}{n}
+    \]
+    Trong đó:
+    \begin{itemize}
+        \item \(x_i\): Giá trị của phần tử thứ \(i\).
+        \item \(n\): Tổng số phần tử trong tập dữ liệu.
+    \end{itemize}
+    \textit{Ý nghĩa:} Mean phản ánh giá trị trung bình tổng quát, nhưng nhạy cảm với các giá trị ngoại lai (outliers). \\
+    \textit{Ứng dụng:} Được dùng trong kinh tế để tính trung bình thu nhập, điểm số, v.v.
+
+    \item \textbf{Median (Trung vị):} \\
+    Median là giá trị nằm ở vị trí trung tâm khi tập dữ liệu được sắp xếp theo thứ tự tăng dần hoặc giảm dần.
+    \begin{itemize}
+        \item Nếu \(n\) lẻ: Median là giá trị ở vị trí \(\frac{n+1}{2}\).
+        \item Nếu \(n\) chẵn: Median là trung bình cộng của hai giá trị ở vị trí \(\frac{n}{2}\) và \(\frac{n}{2} + 1\).
+    \end{itemize}
+    \textit{Ý nghĩa:} Median không bị ảnh hưởng bởi ngoại lai, phù hợp với dữ liệu lệch. \\
+    \textit{Ứng dụng:} Phân tích thu nhập để tránh tác động của giá trị cực đại.
+
+    \item \textbf{Mode (Mốt):} \\
+    Mode là giá trị xuất hiện với tần suất cao nhất trong tập dữ liệu. Có thể có một mode, nhiều mode, hoặc không có mode. \\
+    \textit{Ý nghĩa:} Mode xác định giá trị phổ biến nhất, hữu ích cho dữ liệu phân loại. \\
+    \textit{Ứng dụng:} Xác định sản phẩm bán chạy nhất trong thị trường.
+
+    \item \textbf{Midrange (Trung tuyến):} \\
+    Midrange là trung bình cộng của giá trị lớn nhất và nhỏ nhất trong tập dữ liệu. \\
+    Công thức:
+    \[
+    \text{Midrange} = \frac{x_{\text{max}} + x_{\text{min}}}{2}
+    \]
+    \textit{Ý nghĩa:} Midrange cung cấp một ước lượng đơn giản về trung tâm dữ liệu, nhưng rất nhạy cảm với ngoại lai do chỉ dựa vào hai giá trị cực trị. \\
+    \textit{Ứng dụng:} Được dùng trong các bài toán đơn giản như đo nhiệt độ trung bình trong ngày.
+\end{enumerate}
+
+\subsubsection*{2. Đo lường độ phân tán (Measures of Dispersion)}
+Độ phân tán mô tả mức độ biến thiên hoặc lan rộng của dữ liệu xung quanh xu hướng trung tâm.
+
+\begin{enumerate}[label=\Roman*.]
+    \item \textbf{Range (Khoảng biến thiên):} \\
+    Range là chênh lệch giữa giá trị lớn nhất và nhỏ nhất. \\
+    Công thức:
+    \[
+    \text{Range} = x_{\text{max}} - x_{\text{min}}
+    \]
+    \textit{Ý nghĩa:} Range đơn giản nhưng không phản ánh phân bố chi tiết của dữ liệu. \\
+    \textit{Ứng dụng:} Kiểm soát chất lượng (ví dụ: chênh lệch nhiệt độ).
+
+    \item \textbf{Variance (Phương sai):} \\
+    Variance đo lường mức độ phân tán trung bình của dữ liệu so với mean. \\
+    Công thức:
+    \begin{itemize}
+        \item Cho tổng thể:
+        \[
+        \text{Variance} (\sigma^2) = \frac{\sum_{i=1}^{n} (x_i - \mu)^2}{n}
+        \]
+        \item Cho mẫu:
+        \[
+        \text{Variance} (s^2) = \frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}
+        \]
+    \end{itemize}
+    \textit{Ý nghĩa:} Variance lớn cho thấy dữ liệu phân tán mạnh. \\
+    \textit{Ứng dụng:} Đo lường rủi ro tài chính.
+
+    \item \textbf{Standard Deviation (Độ lệch chuẩn):} \\
+    Standard deviation là căn bậc hai của variance. \\
+    Công thức:
+    \begin{itemize}
+        \item Cho tổng thể:
+        \[
+        \text{Standard Deviation} (\sigma) = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \mu)^2}{n}}
+        \]
+        \item Cho mẫu:
+        \[
+        \text{Standard Deviation} (s) = \sqrt{\frac{\sum_{i=1}^{n} (x_i - \bar{x})^2}{n-1}}
+        \]
+    \end{itemize}
+    \textit{Ý nghĩa:} Dễ diễn giải hơn variance, phổ biến trong phân phối chuẩn. \\
+    \textit{Ứng dụng:} Đánh giá độ tin cậy của phép đo.
+
+    \item \textbf{Interquartile Range (IQR - Khoảng tứ phân vị):} \\
+    IQR là khoảng cách giữa phân vị thứ ba (Q3) và phân vị thứ nhất (Q1), tức là phạm vi chứa 50\% dữ liệu ở giữa. \\
+    Công thức:
+    \[
+    \text{IQR} = Q_3 - Q_1
+    \]
+    \textit{Ý nghĩa:} IQR không bị ảnh hưởng bởi ngoại lai, đo lường độ phân tán của phần trung tâm dữ liệu. \\
+    \textit{Ứng dụng:} Dùng trong boxplot để phát hiện giá trị ngoại lai.
+\end{enumerate}
+
+\subsubsection*{3. Hình dạng phân phối (Shape of Distribution)}
+Hình dạng phân phối cung cấp thông tin về cách dữ liệu được phân bố.
+
+\begin{enumerate}[label=\Roman*.]
+    \item \textbf{Skewness (Độ lệch):} \\
+    Skewness đo lường mức độ bất đối xứng của phân phối. \\
+    Công thức:
+    \[
+    \text{Skewness} = \frac{\sum_{i=1}^{n} (x_i - \mu)^3 / n}{\sigma^3}
+    \]
+    \begin{itemize}
+        \item \(> 0\): Lệch phải.
+        \item \(< 0\): Lệch trái.
+        \item \(= 0\): Đối xứng.
+    \end{itemize}
+    \textit{Ý nghĩa:} Hỗ trợ chọn phương pháp phân tích thống kê. \\
+    \textit{Ứng dụng:} Phân tích lợi nhuận tài chính.
+
+    \item \textbf{Kurtosis (Độ nhọn):} \\
+    Kurtosis đo lường độ nhọn hoặc phẳng của phân phối. \\
+    Công thức:
+    \[
+    \text{Kurtosis} = \frac{\sum_{i=1}^{n} (x_i - \mu)^4 / n}{\sigma^4}
+    \]
+    \begin{itemize}
+        \item \(= 3\): Phân phối chuẩn.
+        \item \(> 3\): Nhọn, đuôi dày.
+        \item \(< 3\): Phẳng, đuôi mỏng.
+    \end{itemize}
+    \textit{Ý nghĩa:} Đo lường khả năng xảy ra giá trị ngoại lai. \\
+    \textit{Ứng dụng:} Phân tích rủi ro.
+
+    \item \textbf{Percentiles (Phân vị):} \\
+    Percentiles chia tập dữ liệu thành 100 phần bằng nhau, trong đó phân vị thứ \(p\) (P\(p\)) là giá trị mà \(p\%\) dữ liệu nằm dưới nó. \\
+    \textit{Cách tính:} Sắp xếp dữ liệu, vị trí của P\(p\) là \( \frac{p}{100} \times (n+1) \). \\
+    \textit{Ý nghĩa:} Mô tả vị trí tương đối của dữ liệu, phổ biến là Q1 (25\%), Q2 (50\%, tức median), Q3 (75\%). \\
+    \textit{Ứng dụng:} Đánh giá phân phối thu nhập hoặc điểm số.
+\end{enumerate}
+
+\subsection*{Ứng dụng của Thống kê mô tả}
+Thống kê mô tả giúp:
+\begin{enumerate}
+    \item \textbf{Tóm tắt dữ liệu:} Chuyển đổi dữ liệu thô thành số liệu dễ hiểu.
+    \item \textbf{Trực quan hóa:} Dùng histogram, boxplot, scatter plot để minh họa.
+    \item \textbf{Cơ sở cho suy luận:} Hỗ trợ ước lượng tham số, kiểm định giả thuyết.
+    \item \textbf{So sánh dữ liệu:} Đánh giá sự khác biệt giữa các nhóm.
+\end{enumerate}
+
+\subsection*{Kết luận}
+Thống kê mô tả là công cụ mạnh mẽ để khám phá dữ liệu, kết hợp các chỉ số xu hướng trung tâm, độ phân tán và hình dạng phân phối. Việc lựa chọn chỉ số phù hợp và diễn giải trong bối cảnh cụ thể là yếu tố then chốt để áp dụng hiệu quả.
+\subsection*{Hồi quy tuyến tính}
+\textbf{Mục tiêu:} Tìm ra sự ảnh hưởng của từng biến lên chỉ số cân nặng, đồng thời xây dựng mô hình dự đoán giá trị của biến phụ thuộc dựa trên các biến độc lập và đánh giá mức độ phù hợp của mô hình với dữ liệu thực tế.
+
+\subsubsection*{Hồi quy đơn biến}
+\textbf{Khái niệm}  
+Hồi quy tuyến tính đơn biến là phương pháp thống kê mô hình hóa mối quan hệ tuyến tính giữa một biến độc lập \(X\) và một biến phụ thuộc \(Y\). Mô hình được biểu diễn dưới dạng:  
+\begin{equation}
+    Y = \beta_0 + \beta_1 X + \epsilon
+\end{equation}
+Trong đó:  
+\begin{itemize}
+    \item \(Y\): Biến phụ thuộc (ví dụ: chỉ số cân nặng).  
+    \item \(X\): Biến độc lập (ví dụ: chiều cao).  
+    \item \(\beta_0\): Hệ số chặn (intercept), giá trị của \(Y\) khi \(X = 0\).  
+    \item \(\beta_1\): Hệ số góc (slope), thể hiện mức độ thay đổi của \(Y\) khi \(X\) tăng thêm một đơn vị.  
+    \item \(\epsilon\): Sai số ngẫu nhiên, đại diện cho các yếu tố không giải thích được bởi mô hình, thường được giả định tuân theo phân phối chuẩn với kỳ vọng bằng 0 và phương sai không đổi (\(\epsilon \sim N(0, \sigma^2)\)).
+\end{itemize}
+
+\textbf{Các giả định của hồi quy đơn biến}  
+Để mô hình hồi quy tuyến tính đơn biến có ý nghĩa thống kê, cần thỏa mãn các giả định sau:  
+\begin{itemize}
+    \item Quan hệ giữa \(X\) và \(Y\) là tuyến tính.  
+    \item Sai số \(\epsilon\) có phân phối chuẩn với kỳ vọng bằng 0.  
+    \item Phương sai của sai số (\(\text{Var}(\epsilon)\)) là không đổi (đồng nhất phương sai - homoscedasticity).  
+    \item Các quan sát là độc lập với nhau (không có tự tương quan).  
+\end{itemize}
+
+\textbf{Các bước thực hiện}  
+\begin{enumerate}
+    \item \textbf{Thu thập và xử lý dữ liệu:}  
+    - Thu thập cặp dữ liệu \((X, Y)\) từ mẫu.  
+    - Kiểm tra và xử lý giá trị ngoại lai, dữ liệu bị thiếu (missing data).  
+    \item \textbf{Ước lượng tham số bằng phương pháp bình phương tối thiểu (OLS):}  
+    - Tìm \(\beta_0\) và \(\beta_1\) sao cho tổng bình phương sai số \(\sum (Y_i - \hat{Y}_i)^2\) nhỏ nhất, với \(\hat{Y}_i = \beta_0 + \beta_1 X_i\).  
+    - Công thức ước lượng:  
+    \[
+    \beta_1 = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sum (X_i - \bar{X})^2}, \quad \beta_0 = \bar{Y} - \beta_1 \bar{X}
+    \]  
+    \item \textbf{Đánh giá mô hình:}  
+    \begin{itemize}
+        \item \textbf{Hệ số xác định \(R^2\):} Đo lường mức độ giải thích của mô hình, dao động từ 0 đến 1 (1 là hoàn hảo).  
+        \[
+        R^2 = 1 - \frac{\sum (Y_i - \hat{Y}_i)^2}{\sum (Y_i - \bar{Y})^2}
+        \]
+        \item \textbf{Kiểm định ý nghĩa hệ số hồi quy:} Sử dụng kiểm định \(t\) để đánh giá \(\beta_1\) có khác 0 hay không (p-value < 0.05).  
+        \item \textbf{Kiểm tra giả định hồi quy:}  
+        - Dùng biểu đồ phân tán (residual plot) kiểm tra tuyến tính và đồng nhất phương sai.  
+        - Kiểm tra phân phối chuẩn của sai số bằng biểu đồ Q-Q hoặc kiểm định Shapiro-Wilk.  
+    \end{itemize}
+    \item \textbf{Dự báo giá trị mới:} Sử dụng \(\hat{Y} = \beta_0 + \beta_1 X\) để dự đoán \(Y\) cho giá trị \(X\) mới, kèm theo khoảng tin cậy (confidence interval).  
+\end{enumerate}
+
+\textbf{Ý nghĩa}  
+\begin{itemize}
+    \item Xác định mức độ ảnh hưởng của một yếu tố đến kết quả (ví dụ: chiều cao ảnh hưởng bao nhiêu đến cân nặng).  
+    \item Dự đoán xu hướng dựa trên một biến duy nhất (ví dụ: dự đoán cân nặng từ chiều cao).  
+    \item Hỗ trợ ra quyết định trong các vấn đề đơn giản.  
+\end{itemize}
+
+
+\textbf{Ví dụ thực tế}  
+Dự đoán cân nặng (\(Y\)) dựa trên chiều cao (\(X\)): Nếu \(\beta_1 = 0.5\), mỗi cm chiều cao tăng thêm làm tăng cân nặng trung bình 0.5 kg (giả sử \(\beta_0 = -50\)).
+
+\subsubsection*{Hồi quy đa biến}
+\textbf{Khái niệm}  
+Hồi quy tuyến tính đa biến mở rộng mô hình đơn biến bằng cách đưa vào nhiều biến độc lập \(X_1, X_2, \dots, X_n\) để giải thích biến phụ thuộc \(Y\):  
+\begin{equation}
+    Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_n X_n + \epsilon
+\end{equation}
+Trong đó:  
+\begin{itemize}
+    \item \(X_1, X_2, \dots, X_n\): Các biến độc lập (ví dụ: chiều cao, tuổi, giới tính).  
+    \item \(\beta_1, \beta_2, \dots, \beta_n\): Hệ số hồi quy, thể hiện mức độ ảnh hưởng của từng biến.  
+    \item Các ký hiệu khác tương tự hồi quy đơn biến.  
+\end{itemize}
+
+\textbf{Các giả định của hồi quy đa biến}  
+Ngoài các giả định của hồi quy đơn biến, hồi quy đa biến yêu cầu thêm:  
+\begin{itemize}
+    \item Không có đa cộng tuyến (multicollinearity) giữa các biến độc lập (có thể kiểm tra bằng VIF - Variance Inflation Factor).  
+    \item Mối quan hệ giữa các biến độc lập và biến phụ thuộc là tuyến tính.  
+\end{itemize}
+
+\textbf{Các bước thực hiện}  
+\begin{enumerate}
+    \item \textbf{Chuẩn bị dữ liệu, kiểm tra đa cộng tuyến:}  
+    - Thu thập dữ liệu đầy đủ cho tất cả các biến.  
+    - Kiểm tra tương quan giữa các biến độc lập (correlation matrix) và tính VIF (VIF > 10 thường chỉ ra đa cộng tuyến).  
+    - Chuẩn hóa dữ liệu nếu cần (ví dụ: đưa về thang đo chung).  
+    \item \textbf{Ước lượng hệ số bằng phương pháp OLS:}  
+    - Tối ưu hóa \(\beta_0, \beta_1, \dots, \beta_n\) để giảm thiểu tổng bình phương sai số.  
+    - Sử dụng ma trận (matrix algebra) trong các phần mềm như R hoặc Python để giải.  
+    \item \textbf{Đánh giá mô hình:}  
+    \begin{itemize}
+        \item \textbf{Hệ số \(R^2\) và Adjusted \(R^2\):} \(R^2\) đo mức độ giải thích tổng quát, Adjusted \(R^2\) điều chỉnh theo số biến để tránh overfitting.  
+        \item \textbf{Kiểm định F:} Đánh giá ý nghĩa tổng thể của mô hình (p-value < 0.05).  
+        \item \textbf{Kiểm tra ý nghĩa từng hệ số hồi quy:} Dùng kiểm định \(t\) cho từng \(\beta_i\).  
+        \item \textbf{Kiểm tra các giả định hồi quy:}  
+        - Biểu đồ residual vs fitted để kiểm tra tuyến tính và đồng nhất phương sai.  
+        - Kiểm tra đa cộng tuyến bằng VIF.  
+        - Kiểm tra tự tương quan bằng Durbin-Watson test.  
+    \end{itemize}
+    \item \textbf{Dự báo giá trị mới:} Dùng mô hình đã xây dựng để dự đoán \(Y\) từ tập hợp giá trị \(X_1, X_2, \dots, X_n\), kèm khoảng dự báo (prediction interval).  
+\end{enumerate}
+
+\textbf{Ý nghĩa}  
+\begin{itemize}
+    \item Phân tích đồng thời nhiều yếu tố ảnh hưởng đến kết quả (ví dụ: cân nặng chịu ảnh hưởng từ chiều cao, tuổi, chế độ ăn).  
+    \item Cải thiện khả năng dự báo bằng cách xem xét toàn diện các yếu tố.  
+    \item Hỗ trợ ra quyết định trong các vấn đề phức tạp, đa chiều.  
+\end{itemize}
+
+
+\textbf{Ví dụ thực tế}  
+Dự đoán cân nặng (\(Y\)) dựa trên chiều cao (\(X_1\)), tuổi (\(X_2\)), và số giờ tập thể dục mỗi tuần (\(X_3\)): Nếu \(\beta_1 = 0.4\), \(\beta_2 = 0.1\), \(\beta_3 = -0.2\), thì cân nặng tăng 0.4 kg mỗi cm chiều cao, tăng 0.1 kg mỗi năm tuổi, và giảm 0.2 kg mỗi giờ tập thể dục (giả sử \(\beta_0 = -30\)).
+\subsection{Cây quyết định, Random Forest}
+\end{document}
